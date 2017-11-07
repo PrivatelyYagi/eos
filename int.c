@@ -31,9 +31,15 @@ int main(void){
   } else if (pid == 0) { // 子プロセス
 
     close(pipefd[1]); //書き込みをクローズ
-    char buf;
+    char buf[1];
+//
+    while(1){
     read(pipefd[0], buf, sizeof buf);
-    printf("child=[%d]\n", buf);
+    switch(buf){
+        case'1':
+    }
+//
+    }
     close(pipefd[0]);
 
     return 0;
