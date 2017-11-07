@@ -13,7 +13,7 @@ char c;
 
 //Enable gpio25
 fd = open(“/sys/class/gpio/export”, O_WRONLY);
-write(fd, “25”, 2);
+write(fd,“5”,2);
 close(fd);
 
 //Set gpio25 as input
@@ -44,7 +44,7 @@ close(fd);
 
 //Disable gpio25
 fd = open(“/sys/class/gpio/unexport”, O_WRONLY);
-write(fd, “25”, 2);
+write(fd, “5”, 2);
 close(fd);
 
 return(0);
