@@ -1,4 +1,10 @@
-int pipefd[2];
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+int main(void){
+  int pipefd[2];
 if (pipe(pipefd) < 0) {
   perror("pipe");
   exit(-1);
@@ -27,4 +33,5 @@ if (pid < 0) {
 
   close(pipefd[0]);
   return 0;
+}
 }
