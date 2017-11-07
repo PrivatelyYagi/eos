@@ -1,51 +1,30 @@
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <poll.h>
-
-int main(){
-int i;
-int fd;
-int ret;
-struct pollfd pfd;
-char c;
-
-//Enable gpio25
-fd = open(“/sys/class/gpio/export”, O_WRONLY);
-write(fd,“5”,2);
-close(fd);
-
-//Set gpio25 as input
-fd = open(“/sys/class/gpio/gpio25/direction”, O_WRONLY);
-write(fd, “in”, 2);
-close(fd);
-
-//Set gpio25 interrupt
-fd = open(“/sys/class/gpio/gpio25/edge”, O_WRONLY);
-//write(fd, “falling”, 7);
-write(fd, “both”, 4);
-close(fd);
-
-//Wait for interrupt, repeat 10 times.
-fd = open(“/sys/class/gpio/gpio25/value”, O_RDONLY);
-pfd.fd = fd;
-pfd.events = POLLPRI;
-for(i = 0; i < 10; i++){
-lseek(fd, 0, SEEK_SET);
-ret = poll(&pfd, 1, 3000);
-read(fd, &c, 1);
-if(ret == 0)
-printf(“Timeout\n”);
-else
-printf(“%d=%c\n”, i, c);
+int pipefd[2];
+if (pipe(pipefd) < 0) {
+  perror("pipe");
+  exit(-1);
 }
-close(fd);
+pid_t pid = fork();
+if (pid < 0) {
+  perror("fork");
+  exit(-1);
+} else if (pid == 0) {
+  // 子プロセス
+  close(pipefd[0]); //読み込みをクローズ
 
-//Disable gpio25
-fd = open(“/sys/class/gpio/unexport”, O_WRONLY);
-write(fd, “5”, 2);
-close(fd);
+  char *s = "send from child";
+  write(pipefd[1], s, strlen(s));
 
-return(0);
+
+  close(pipefd[1]);
+  return 0;
+} else {
+  // 親プロセス
+  close(pipefd[1]); //書き込みをクローズ
+
+  char buf[128];
+  read(pipefd[0], buf, sizeof buf);
+  printf("parent=[%s]\n", buf);
+
+  close(pipefd[0]);
+  return 0;
 }
