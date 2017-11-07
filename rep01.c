@@ -8,22 +8,19 @@
 
 #define GPIOPATH "/sys/class/gpio/"
 #define GPIO2 GPIOPATH "gpio2/value"
-#define GPIOPATH "/sys/class/gpio/"
 #define GPIO3 GPIOPATH "gpio3/value"
-#define GPIOPATH "/sys/class/gpio/"
 #define GPIO4 GPIOPATH "gpio4/value"
+#define GPIO5 GPIOPATH "gpio5/value"
 
 
 int main(void){
 
-int fdgpio2,fdgpio3,fdgpio4;
+int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
 struct timespec ts;
 int i;
 
 ts.tv_sec = 0; //sec.
 ts.tv_nsec = 500000000; //nano sec. (500ms)
-
-printf("led chika chika ¥n");
 
 fdgpio2 = open(GPIO2 , O_WRONLY | O_SYNC);
 if(fdgpio2 < 0){
@@ -40,7 +37,6 @@ if(fdgpio4 < 0){
 perror("cannot open " GPIO4 );
 exit(EXIT_FAILURE);
 }
-// gpio3,4のopen
 
 for(i=0; i<10; i++){
 write(fdgpio2, "1", 1);
@@ -59,5 +55,7 @@ nanosleep(&ts, NULL);
 close(fdgpio2);
 close(fdgpio3);
 close(fdgpio4);
+close(fdgpio5);
+
 return 0;
 } //end of main
