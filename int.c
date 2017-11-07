@@ -31,7 +31,7 @@ int main(void){
   } else if (pid == 0) { // 子プロセス
 
     close(pipefd[1]); //書き込みをクローズ
-    int buf;
+    char buf;
     read(pipefd[0], buf, sizeof buf);
     printf("child=[%d]\n", buf);
     close(pipefd[0]);
@@ -41,7 +41,7 @@ int main(void){
   } else {
     // 親プロセス
     close(pipefd[0]); //読み込みをクローズ
-    int *s = 1;
+    char *s = "1";
     write(pipefd[1], s, 1);
     close(pipefd[1]);
     return 0;
