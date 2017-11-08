@@ -75,7 +75,8 @@ int main(void){
       switch(count){
 
         case 0:
-          write(fdgpio4, "0", 1);
+          write(fdgpio2, "0", 1);
+          write(fdgpio3, "0", 1);
           write(fdgpio4, "0", 1);
 
         case 1:
@@ -151,6 +152,9 @@ int main(void){
           break;
 
         default:
+          write(fdgpio2, "0", 1);
+          write(fdgpio3, "0", 1);
+          write(fdgpio4, "0", 1);
           break;
       }
     }else{
