@@ -33,7 +33,7 @@ int main(void){
   ts.tv_nsec = 10000000; // 10ms
   offTs.tv_sec = 0;
   offTs.tv_nsec = 10000000; // 10ms
-  count = 0;
+  count = 10;
 
 
   fdgpio2 = open(GPIO2 , O_WRONLY | O_SYNC);
@@ -81,7 +81,7 @@ int main(void){
           write(fdgpio4, "0", 1);
 
         case 1:
-          offTs.tv_nsec = 15000000;
+          offTs.tv_nsec = 12500000;
           write(fdgpio2, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio2, "0", 1);
@@ -105,7 +105,7 @@ int main(void){
           break;
 
         case 4:
-          offTs.tv_nsec = 15000000;
+          offTs.tv_nsec = 12500000;
           write(fdgpio3, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio3, "0", 1);
@@ -129,7 +129,7 @@ int main(void){
           break;
 
         case 7:
-          offTs.tv_nsec = 15000000;
+          offTs.tv_nsec = 12500000;
           write(fdgpio4, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio4, "0", 1);
@@ -159,21 +159,16 @@ int main(void){
           break;
       }
     }else{
+
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
 
       if(count > 8){
         count = 0;
-        close(fdgpio2);
-        close(fdgpio3);
-        close(fdgpio4);
-        close(fdgpio5);
-        return 0;
       }else{
         count++;
       }
-      printf("%d\n",count );
     }
   }
   return (EXIT_SUCCESS);
