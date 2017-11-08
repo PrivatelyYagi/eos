@@ -79,7 +79,7 @@ int main(void){
       write(STDOUT_FILENO, inbuf, len);
       offCount = 3;
 
-      for(i=0;i<10;i++){
+      for(i=0;i<100;i++){
         write(fdgpio2, "1", 1);
         for(i=0;i<10;i++){
           if(i == offCount) write(fdgpio2, "0", 1);
