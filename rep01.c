@@ -69,7 +69,7 @@ int main(void){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
       write(fdgpio2, "1", 1);
-      nanosleep(&ts_off,NULL);
+      nanosleep(&ts_on,NULL);
     if(pret==0){
       write(fdgpio2, "0", 1);
     }else{
@@ -77,7 +77,7 @@ int main(void){
       lseek(fdgpio5, 0, SEEK_SET);
       len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
-      ts_off.tv_nsec = 10000000; //nano sec.
+      ts_on.tv_nsec = 100000000; //nano sec.
     }
   }
 
