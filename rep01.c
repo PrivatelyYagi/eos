@@ -23,7 +23,7 @@ int turnLed(int currentGpio,int time);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int pret, len, count;
+  int pret, len, count, press;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct timespec offTs;
@@ -162,6 +162,17 @@ int main(void){
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
       write(fdgpio4, "0", 1);
+      while(len == 1){
+        press++;
+        nanosleep(&ts,NULL);
+        if(press >= 200){
+          close(fdgpio2);
+          close(fdgpio3);
+          close(fdgpio4);
+          close(fdgpio5);
+          return 0;
+        }
+      }
       if(count > 8){
         count = 0;
       }else{
