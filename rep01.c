@@ -22,17 +22,15 @@ void showPollRevents(int fd, short revents);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int i, pret, len, count;
+  int i, pret, len, count, offCount;
   char inbuf[INBUF_SIZE];
-  struct timespec ts_on;
-  struct timespec ts_off;
+  struct timespec ts;
   struct pollfd pfd[PFD_SIZE];
 
-  ts_on.tv_sec = 0; //sec.
-  ts_on.tv_nsec = 5000000; //nano sec. (5ms)
-
-  ts_off.tv_sec = 0; //sec.
-  ts_off.tv_nsec = 5000000; //nano sec. (5ms)
+  ts.tv_sec = 0;
+  ts.tv_nsec = 5000000;
+  count = 0;
+  offCount = 3;
 
   system("bash all.sh 2 3 4 5"); // GPIOの設定
 
@@ -62,19 +60,26 @@ int main(void){
 
   pfd[0].fd = fdgpio5;
   pfd[0].events = POLLPRI | POLLERR;
+
   for(;;){
+
     write(fdgpio2, "1", 1);
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
-    if(count >= 5) write(fdgpio2, "0", 1);
+
+    if(count >= offCount){
+      write(fdgpio2, "0", 1);
+    }else if(count >= 10){
+      count = 0;
+    }else{
+      printf("loop¥n");
+    }
     count++;
 
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
-      len=read(fdgpio5, inbuf, INBUF_SIZE);
-      write(STDOUT_FILENO, inbuf, len);
-      ts_on.tv_nsec = 100000000; //nano sec.
+      offCount = 5;
     }
   }
 
