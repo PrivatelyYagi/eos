@@ -14,13 +14,14 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (3000) // 3秒 #define INBUF_SIZE (80)
+#define TIMEOUT_MS (3000) // 3秒
+#define INBUF_SIZE (80)
 #define PFD_SIZE (1)
-
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int i, ready, len;
+  int i, pret, len;
+  char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct pollfd pfd[PFD_SIZE];
 
