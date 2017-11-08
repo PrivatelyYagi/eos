@@ -73,7 +73,7 @@ int main(void){
 
     for(i=0;i<100;i++){
       write(fdgpio2, "1", 1);
-      for(i=0;j<10;j++){
+      for(j=0;j<10;j++){
         if(j == offCount) write(fdgpio2, "0", 1);
         nanosleep(&ts,NULL);
       }
