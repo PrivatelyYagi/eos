@@ -69,10 +69,6 @@ int main(void){
     usleep(250);
 
     if(pret==0){
-      write(fdgpio2, "0", 1);
-      write(fdgpio3, "0", 1);
-      write(fdgpio4, "0", 1);
-
       switch(count){
 
         case 0:
@@ -163,7 +159,9 @@ int main(void){
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
-
+      write(fdgpio2, "0", 1);
+      write(fdgpio3, "0", 1);
+      write(fdgpio4, "0", 1);
       if(count > 8){
         count = 0;
       }else{
