@@ -18,8 +18,6 @@
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 
-int turnLed(int currentGpio,int time);
-
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
@@ -66,18 +64,19 @@ int main(void){
   for(;;){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
-    usleep(250);
+    usleep(300);
 
-    if(pret==0){
+    if(pret == 0){
       switch(count){
 
         case 0:
           write(fdgpio2, "0", 1);
           write(fdgpio3, "0", 1);
           write(fdgpio4, "0", 1);
+          break;
 
         case 1:
-          offTs.tv_nsec = 12500000;
+          offTs.tv_nsec = 12000000;
           write(fdgpio2, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio2, "0", 1);
@@ -101,7 +100,7 @@ int main(void){
           break;
 
         case 4:
-          offTs.tv_nsec = 12500000;
+          offTs.tv_nsec = 12000000;
           write(fdgpio3, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio3, "0", 1);
@@ -125,7 +124,7 @@ int main(void){
           break;
 
         case 7:
-          offTs.tv_nsec = 12500000;
+          offTs.tv_nsec = 12000000;
           write(fdgpio4, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio4, "0", 1);
@@ -162,18 +161,6 @@ int main(void){
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
       write(fdgpio4, "0", 1);
-      for(;len == 1;){
-        press++;
-        nanosleep(&ts,NULL);
-        printf("%d¥n",press );
-        if(press >= 200){
-          close(fdgpio2);
-          close(fdgpio3);
-          close(fdgpio4);
-          close(fdgpio5);
-          return 0;
-        }
-      }
       if(count > 8){
         count = 0;
       }else{
