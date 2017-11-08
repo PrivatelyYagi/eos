@@ -23,7 +23,7 @@ int turnLed(int currentGpio,int time);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int pret, len, count, offCount;
+  int pret, len, count;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct timespec offTs;
@@ -69,22 +69,34 @@ int main(void){
 
 
     if(pret==0){
+      switch(count){
+        case 0:
+          write(fdgpio2, "0", 1);
+          write(fdgpio3, "0", 1);
+          write(fdgpio4, "0", 1);
+          break;
 
-      write(fdgpio2, "0", 1);
-      write(fdgpio3, "0", 1);
-      write(fdgpio4, "0", 1);
+        case 1:
+          write(fdgpio2, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio2, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
 
-      write(fdgpio2, "1", 1);
-      nanosleep(&ts,NULL);
-      write(fdgpio2, "0", 1);
-      nanosleep(&offTs,NULL);
-
+        default:
+          break;
+      }
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
 
-      offTs.tv_nsec = 5000000; // 5ms
+      if(count > 1){
+        count = 0;
+      }else{
+        count++;
+      }
+
     }
   }
   return (EXIT_SUCCESS);
