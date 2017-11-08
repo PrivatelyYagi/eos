@@ -30,7 +30,7 @@ int main(void){
   struct pollfd pfd[PFD_SIZE];
 
   ts.tv_sec = 0;
-  ts.tv_nsec = 10000000; // 10ms
+  ts.tv_nsec = 15000000; // 10ms
   offTs.tv_sec = 0;
   offTs.tv_nsec = 10000000; // 10ms
   count = 0;
