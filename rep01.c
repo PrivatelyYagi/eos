@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (1) // 10ms
+#define TIMEOUT_MS (1) // 1ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
@@ -29,8 +29,9 @@ int main(void){
 
   ts.tv_sec = 0;
   ts.tv_nsec = 5000000;
+
   count = 0;
-  offCount = 3;
+  offCount = 5;
 
   system("bash all.sh 2 3 4 5"); // GPIOの設定
 
@@ -60,26 +61,23 @@ int main(void){
 
   pfd[0].fd = fdgpio5;
   pfd[0].events = POLLPRI | POLLERR;
-
   for(;;){
 
     write(fdgpio2, "1", 1);
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
 
-    if(count >= offCount){
-      write(fdgpio2, "0", 1);
-    }else if(count >= 10){
-      count = 0;
-    }else{
-      printf("loop¥n");
-    }
+    if(count >= offCount){ write(fdgpio2, "0", 1); }
+    if(count >= 10){ count = 0; }
+
     count++;
 
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
-      offCount = 5;
+      len=read(fdgpio5, inbuf, INBUF_SIZE);
+      write(STDOUT_FILENO, inbuf, len);
+      offCount = 3;
     }
   }
 
