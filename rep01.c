@@ -66,7 +66,7 @@ int main(void){
   for(;;){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
-    nanosleep(&ts,NULL);
+    usleep(300);
 
     if(pret==0){
       write(fdgpio2, "0", 1);
@@ -75,7 +75,7 @@ int main(void){
       switch(count){
 
         case 0:
-          offTs.tv_nsec = 1000000;
+          offTs.tv_nsec = 800000;
           write(fdgpio2, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio2, "0", 1);
@@ -146,12 +146,6 @@ int main(void){
           nanosleep(&offTs,NULL);
           break;
 
-        case 9:
-
-          write(fdgpio2, "0", 1);
-          write(fdgpio2, "0", 1);
-          break;
-
         default:
           break;
       }
@@ -160,7 +154,7 @@ int main(void){
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
 
-      if(count > 9){
+      if(count > 8){
         count = 0;
       }else{
         count++;
