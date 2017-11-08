@@ -1,3 +1,11 @@
+/*
+ * 京都コンピュータ学院
+ * コンピュータ工学科
+ * R15E2003 八木晋作
+ *
+ * RaspberryPi で GPIO を使用し LED を順次点灯させる
+ *
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +29,7 @@
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int pret, len, count, press;
+  int pret, len, count;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct timespec offTs;
@@ -31,7 +39,7 @@ int main(void){
   ts.tv_nsec = 10000000; // 10ms
   offTs.tv_sec = 0;
   offTs.tv_nsec = 10000000; // 10ms
-  count = 10;
+  count = 10; // ボタンを押されたときの条件分岐のみで終了させるために10で初期化 //改善の余地あり
 
 
   fdgpio2 = open(GPIO2 , O_WRONLY | O_SYNC);
@@ -64,7 +72,7 @@ int main(void){
   for(;;){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
-    usleep(300);
+    usleep(300); // チャタリング対策
 
     if(pret == 0){
       switch(count){
@@ -156,7 +164,7 @@ int main(void){
     }else{
 
       lseek(fdgpio5, 0, SEEK_SET);
-      len = read(fdgpio5, inbuf, INBUF_SIZE);
+      len = read(fdgpio5, inbuf, INBUF_SIZE); // この処理を無くすとバッファが溜まり続け誤作動する
       write(STDOUT_FILENO, inbuf, len);
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
@@ -174,5 +182,5 @@ int main(void){
       }
     }
   }
-  return (EXIT_SUCCESS);
+  return 0;
 }
