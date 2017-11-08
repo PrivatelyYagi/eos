@@ -162,7 +162,7 @@ int main(void){
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
       write(fdgpio4, "0", 1);
-      while(len == 1){
+      while(read(fdgpio5, inbuf, INBUF_SIZE)){
         press++;
         nanosleep(&ts,NULL);
         if(press >= 200){
