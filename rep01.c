@@ -161,14 +161,12 @@ int main(void){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
-      write(STDOUT_FILENO, inbuf, len);
 
       if(count > 8){
         count = 0;
       }else{
         count++;
       }
-      printf("%d\n",count );
 
     }
   }
