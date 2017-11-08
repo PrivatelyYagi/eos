@@ -65,7 +65,7 @@ int main(void){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
       write(fdgpio2, "1", 1);
-      sleep(100);
+      sleep(1);
       write(fdgpio2, "0", 1);
       nanosleep(&ts,NULL);
     if(pret==0){
