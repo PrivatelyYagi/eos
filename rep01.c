@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (100) // 10ms
+#define TIMEOUT_MS (10) // 10ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
@@ -68,11 +68,10 @@ int main(void){
   for(;;){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
-      write(fdgpio2, "0", 1);
+      write(fdgpio2, "1", 1);
       nanosleep(&ts_off,NULL);
     if(pret==0){
-//      write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
-      write(fdgpio2, "1", 1);
+      write(fdgpio2, "0", 1);
     }else{
       write(STDOUT_FILENO, "sw¥n", strlen("sw¥n"));
       lseek(fdgpio5, 0, SEEK_SET);
