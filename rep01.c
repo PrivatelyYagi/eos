@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (10) // 10ms
+#define TIMEOUT_MS (1) // 10ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
@@ -22,7 +22,7 @@ void showPollRevents(int fd, short revents);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int i, pret, len;
+  int i, pret, len, count;
   char inbuf[INBUF_SIZE];
   struct timespec ts_on;
   struct timespec ts_off;
@@ -62,18 +62,15 @@ int main(void){
 
   pfd[0].fd = fdgpio5;
   pfd[0].events = POLLPRI | POLLERR;
-
-  write(STDOUT_FILENO, "waiting for interrupt...¥n", strlen("waiting for interrupt...¥n"));
-
   for(;;){
+    write(fdgpio2, "1", 1);
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
+    if(count >= 5) write(fdgpio2, "0", 1);
+    count++;
+
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
-      write(fdgpio2, "1", 1);
-      nanosleep(&ts_on,NULL);
     if(pret==0){
-      write(fdgpio2, "0", 1);
     }else{
-      write(STDOUT_FILENO, "sw¥n", strlen("sw¥n"));
       lseek(fdgpio5, 0, SEEK_SET);
       len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
