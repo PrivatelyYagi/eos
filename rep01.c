@@ -162,9 +162,10 @@ int main(void){
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
       write(fdgpio4, "0", 1);
-      while(read(fdgpio5, inbuf, INBUF_SIZE)){
+      for(;;){
         press++;
         nanosleep(&ts,NULL);
+        printf("%d¥n",press );
         if(press >= 200){
           close(fdgpio2);
           close(fdgpio3);
