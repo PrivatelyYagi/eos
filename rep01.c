@@ -66,7 +66,7 @@ int main(void){
 
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
-      write(fdgpio2, "1", 1);
+      len = write(fdgpio2, "1", 1);
     }else{
       write(fdgpio2, "0", 1);
       lseek(fdgpio5, 0, SEEK_SET);
