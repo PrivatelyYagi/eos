@@ -167,6 +167,7 @@ int main(void){
       }else{
         count++;
       }
+      printf("%d\n",count );
 
     }
   }
