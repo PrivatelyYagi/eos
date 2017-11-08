@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (10) // 10ms
+#define TIMEOUT_MS (100) // 10ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
