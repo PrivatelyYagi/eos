@@ -28,8 +28,6 @@ int main(void){
 
   ts.tv_sec = 0;
   ts.tv_nsec = 1000000000; // 1ms
-  count = 0;
-  offCount = 7;
 
   system("bash all.sh 2 3 4 5"); // GPIOの設定
 
