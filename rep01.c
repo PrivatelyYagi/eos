@@ -21,7 +21,7 @@
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int i, j, pret, len, count, offCount;
+  int i, j, pret, count, offCount;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct pollfd pfd[PFD_SIZE];
@@ -64,11 +64,11 @@ int main(void){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
 
     if(pret==0){
-      printf("%d\n",len );
+
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
-      len = read(fdgpio5, inbuf, INBUF_SIZE);
-      printf("%d\n",len );
+      printf("pushed!\n");
+
     }
   }
 
