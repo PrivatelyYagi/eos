@@ -27,7 +27,7 @@ int main(void){
   struct pollfd pfd[PFD_SIZE];
 
   ts.tv_sec = 0;
-  ts.tv_nsec = 1000000000; // 1000ms
+  ts.tv_nsec = 500000000; // 1000ms
 
 //  system("bash init.sh"); // GPIOの設定
 
@@ -59,7 +59,7 @@ int main(void){
   pfd[0].events = POLLPRI | POLLERR;
   for(;;){
 
-    pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
+    pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
     nanosleep(&ts, NULL);
     printf("%d\n",pret );
     if(pret==0){
