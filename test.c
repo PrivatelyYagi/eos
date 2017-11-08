@@ -1,48 +1,44 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
+#include <poll.h>
 
-#define GPIO_PATH "/sys/class/gpio/"
-#define GPIO5 GPIO_PATH "gpio5/value"
-#define GPIO2 GPIO_PATH "gpio2/value"
-#define INBUF_SIZE 256
+#define TIMEOUT_MS (3000) // 3秒
+#define TIMEOUT_NONE (-1) //
+#define PFD_SIZE (1)
 
-int main(void){
-  FILE *fpgpio5, *fpgpio2;
-  char inbuf[INBUF_SIZE];
+void showPollRevents(int fd, short revents);
 
-  fpgpio5 = fopen(GPIO5, "r");
-  if(fpgpio5==NULL){
-    perror("fopen error:");
-    return 1;
-  }
-  fpgpio2 = fopen(GPIO2, "w");
-  if(fpgpio2 == NULL){
-    perror("fopen error:");
-    return 1;
-  }
-  fprintf(fpgpio2,"1");
-  fflush(fpgpio2);
-  sleep(1);
-  fprintf(fpgpio2,"0");
-  fflush(fpgpio2);
-  sleep(1);
-
-for(;;){
-  fseek(fpgpio5, 0L, SEEK_SET);
-  fgets(inbuf, INBUF_SIZE, fpgpio5);
-  fflush(fpgpio5);
-  if(strcmp(inbuf,"0\n")==0){
-    printf("input: %s \n", inbuf);
-    fprintf(fpgpio2,"0");
-    fflush(fpgpio2);
-  }else{
-    printf("input: %s \n", inbuf);
-    fprintf(fpgpio2,"1");
-    fflush(fpgpio2);
-  }
-  sleep(1);
+int main(void) {
+int ready, len;
+struct pollfd pfd[PFD_SIZE];
+pfd[0].fd = STDIN_FILENO; // STDIN_FILENO=0
+pfd[0].events = POLLIN; //読込準備OK
+write(STDOUT_FILENO, "waiting for interrupt...¥n", strlen("waiting for interrupt...¥n"));
+ready=poll(pfd, PFD_SIZE, TIMEOUT_MS);
+showPollRevents(STDOUT_FILENO, pfd[0].revents);
+if(ready==0){
+len=write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
+}else{
+len=write(STDOUT_FILENO, "keyin.¥n", strlen("keyin.¥n"));
 }
-  return 0;
+return (EXIT_SUCCESS);
 }
-
+void showPollRevents(int fd, short revents) {
+if(revents & POLLIN){
+write(fd, "POLLIN¥n", strlen("POLLIN¥n"));
+}
+if(revents & POLLPRI){
+write(fd, "POLLPRI¥n", strlen("POLLPRI¥n")); }
+if(revents & POLLOUT){
+write(fd, "POLLOUT¥n", strlen("POLLOUT¥n"));
+}
+if(revents & POLLERR){
+write(fd, "POLLERR¥n", strlen("POLLERR¥n")); }
+if(revents & POLLHUP){
+write(fd, "POLLHUP¥n", strlen("POLLHUP¥n"));
+}
+if(revents & POLLNVAL){
+write(fd, "POLLNVAL¥n", strlen("POLLNVAL¥n")); }
+}

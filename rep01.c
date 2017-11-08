@@ -29,7 +29,6 @@ int main(void){
 
   ts.tv_sec = 0;
   ts.tv_nsec = 1000000; // 1ms
-
   count = 0;
   offCount = 7;
 
@@ -67,12 +66,10 @@ int main(void){
 
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
-
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
-      offCount = 3;
     }
   }
 
