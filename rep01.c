@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (5000)
+#define TIMEOUT_MS (0)
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 
@@ -66,6 +66,15 @@ int main(void){
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     printf("%d\n",pret );
     if(pret==0){
+      printf("%d\n",fdgpio2 );
+      nanosleep(&ts,NULL);
+/*
+      close(fdgpio2);
+      close(fdgpio3);
+      close(fdgpio4);
+      close(fdgpio5);
+      system("bash end.sh 2 3 4 5");  // GPIOを開放
+*/
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
@@ -74,7 +83,6 @@ int main(void){
 
   }
 
-  system("bash end.sh 2 3 4 5");  // GPIOを開放
 
   return (EXIT_SUCCESS);
 }
