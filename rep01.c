@@ -65,21 +65,12 @@ int main(void){
 
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
 
-    write(fdgpio2, "1", 1);
-    for(j=0;j<10;j++){
-      if(j > offCount) {
-       write(fdgpio2, "0", 1);
-      }
-    nanosleep(&ts,NULL);
-    }
-
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
 
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
-      fflush(fpgpio5);
       write(STDOUT_FILENO, inbuf, len);
       offCount = 3;
     }
