@@ -79,6 +79,7 @@ int main(void){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
+      fflush(fpgpio5);
       write(STDOUT_FILENO, inbuf, len);
       offCount = 3;
     }
