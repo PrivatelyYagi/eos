@@ -66,7 +66,7 @@ int main(void){
   for(;;){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
-    usleep(300);
+    usleep(250);
 
     if(pret==0){
       write(fdgpio2, "0", 1);
@@ -161,13 +161,14 @@ int main(void){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
+      write(STDOUT_FILENO, inbuf, len);
 
       if(count > 8){
         count = 0;
       }else{
         count++;
       }
-
+      printf("%d\n",count );
     }
   }
   return (EXIT_SUCCESS);
