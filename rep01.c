@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (1) // 1ms
+#define TIMEOUT_MS (5000) // 1ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 
@@ -27,7 +27,7 @@ int main(void){
   struct pollfd pfd[PFD_SIZE];
 
   ts.tv_sec = 0;
-  ts.tv_nsec = 1000000; // 1ms
+  ts.tv_nsec = 1000000000; // 1ms
   count = 0;
   offCount = 7;
 
@@ -60,7 +60,6 @@ int main(void){
   pfd[0].fd = fdgpio5;
   pfd[0].events = POLLPRI | POLLERR;
   for(;;){
-
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     printf("%d\n",pret);
     nanosleep(&ts,NULL);
