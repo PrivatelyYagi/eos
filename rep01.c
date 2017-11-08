@@ -122,7 +122,7 @@ int main(void){
           break;
 
         case 6:
-          offTs.tv_nsec = 12000000;
+          offTs.tv_nsec = 20000000;
           write(fdgpio4, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio4, "0", 1);
@@ -130,7 +130,7 @@ int main(void){
           break;
 
         case 7:
-          offTs.tv_nsec = 8000000;
+          offTs.tv_nsec = 10000000;
           write(fdgpio4, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio4, "0", 1);
