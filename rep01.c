@@ -64,6 +64,7 @@ int main(void){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
 
     if(pret==0){
+      printf("%d\n",len );
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
