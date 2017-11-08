@@ -78,7 +78,7 @@ int main(void){
       lseek(fdgpio5, 0, SEEK_SET);
       len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
-      ts_off.tv_nsec = 100000; //nano sec.
+      ts_off.tv_nsec = 10000000; //nano sec.
     }
   }
 
