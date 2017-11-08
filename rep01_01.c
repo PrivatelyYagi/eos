@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (5000) // 3秒
+#define TIMEOUT_MS (3000) // 3秒
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
@@ -65,12 +65,17 @@ int main(void){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
-      write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
+      write(fdgpio2, "1", 1);
+      sleep(100);
+      write(fdgpio2, "0", 1);
+      nanosleep(&ts,NULL);
+//      write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
     }else{
       write(STDOUT_FILENO, "sw¥n", strlen("sw¥n"));
       lseek(fdgpio5, 0, SEEK_SET);
       len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
+      ts.tv_nsec = 50000000; //nano sec.
     }
   }
 
