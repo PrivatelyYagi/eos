@@ -161,7 +161,13 @@ int main(void){
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
       write(fdgpio4, "0", 1);
-      if(count > 8){
+      if(count == 9){
+        close(fdgpio2);
+        close(fdgpio3);
+        close(fdgpio4);
+        close(fdgpio5);
+        return 0;
+      }else if(count > 8){
         count = 0;
       }else{
         count++;
