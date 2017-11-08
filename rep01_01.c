@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (3000) // 3秒
+#define TIMEOUT_MS (5000) // 3秒
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
@@ -68,7 +68,8 @@ int main(void){
       write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
     }else{
       write(STDOUT_FILENO, "sw¥n", strlen("sw¥n"));
-      lseek(fdgpio5, 0, SEEK_SET); len=read(fdgpio5, inbuf, INBUF_SIZE);
+      lseek(fdgpio5, 0, SEEK_SET);
+      len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
     }
   }
