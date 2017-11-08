@@ -64,11 +64,11 @@ int main(void){
   for(;;){
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
-    if(pret==0){
       write(fdgpio2, "1", 1);
       sleep(100);
       write(fdgpio2, "0", 1);
       nanosleep(&ts,NULL);
+    if(pret==0){
 //      write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
     }else{
       write(STDOUT_FILENO, "sw¥n", strlen("sw¥n"));
