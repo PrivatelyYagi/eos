@@ -18,7 +18,7 @@
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 
-void showPollRevents(int fd, short revents);
+int turnLed(int currentGpio,int time);
 
 int main(void){
 
@@ -26,14 +26,15 @@ int main(void){
   int pret, len, count, offCount;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
+  struct timespec offTs;
   struct pollfd pfd[PFD_SIZE];
 
-  count = 0;
-  offCount = 5;
   ts.tv_sec = 0;
-  ts.tv_nsec = 1000000; // 1ms
+  ts.tv_nsec = 100000000; // 100ms
+  offTs.tv_sec = 0;
+  offTs.tv_nsec = 100000000; // 100ms
+  count = 0;
 
-//  system("bash init.sh"); // GPIOの設定
 
   fdgpio2 = open(GPIO2 , O_WRONLY | O_SYNC);
   if(fdgpio2 < 0){
@@ -61,41 +62,28 @@ int main(void){
 
   pfd[0].fd = fdgpio5;
   pfd[0].events = POLLPRI | POLLERR;
+
   for(;;){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
-    nanosleep(&ts, NULL);
-    showPollRevents(STDOUT_FILENO, pfd[0].revents);
+
+
     if(pret==0){
-      write(fdgpio2,"1",1);
+
+      write(fdgpio2, "0", 1);
+      write(fdgpio3, "0", 1);
+      write(fdgpio4, "0", 1);
+
+      write(fdgpio2, "1", 1);
       nanosleep(&ts,NULL);
-      if(count > offCount) write(fdgpio2,"0",1);
+      write(fdgpio2, "0", 1);
+      nanosleep(&offTs,NULL);
+
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
-      write(STDOUT_FILENO, inbuf, len);
-      offCount = 8;
     }
-    count++;
-    if(count>10) count = 0;
-
   }
-
-
   return (EXIT_SUCCESS);
-}
-void showPollRevents(int fd, short revents){
-    if(revents & POLLIN)
-        write(fd, "POLLIN¥n", strlen("POLLIN¥n"));
-    if(revents & POLLPRI)
-        write(fd, "POLLPRI¥n", strlen("POLLPRI¥n"));
-    if(revents & POLLOUT)
-        write(fd, "POLLOUT¥n", strlen("POLLOUT¥n"));
-    if(revents & POLLERR)
-        write(fd, "POLLERR¥n", strlen("POLLERR¥n"));
-    if(revents & POLLHUP)
-        write(fd, "POLLHUP¥n", strlen("POLLHUP¥n"));
-    if(revents & POLLNVAL)
-        write(fd, "POLLNVAL¥n", strlen("POLLNVAL¥n"));
 }
 
