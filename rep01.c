@@ -18,6 +18,8 @@
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 
+void showPollRevents(int fd, short revents);
+
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
@@ -27,7 +29,7 @@ int main(void){
   struct pollfd pfd[PFD_SIZE];
 
   ts.tv_sec = 0;
-  ts.tv_nsec = 500000000; // 1000ms
+  ts.tv_nsec = 500000000; // 500ms
 
 //  system("bash init.sh"); // GPIOの設定
 
@@ -61,6 +63,7 @@ int main(void){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
     nanosleep(&ts, NULL);
+    showPollRevents(STDOUT_FILENO, pfd[0].revents);
     printf("%d\n",pret );
     if(pret==0){
     }else{
@@ -73,3 +76,18 @@ int main(void){
 
   return (EXIT_SUCCESS);
 }
+void showPollRevents(int fd, short revents){
+    if(revents & POLLIN)
+        write(fd, "POLLIN¥n", strlen("POLLIN¥n"));
+    if(revents & POLLPRI)
+        write(fd, "POLLPRI¥n", strlen("POLLPRI¥n"));
+    if(revents & POLLOUT)
+        write(fd, "POLLOUT¥n", strlen("POLLOUT¥n"));
+    if(revents & POLLERR)
+        write(fd, "POLLERR¥n", strlen("POLLERR¥n"));
+    if(revents & POLLHUP)
+        write(fd, "POLLHUP¥n", strlen("POLLHUP¥n"));
+    if(revents & POLLNVAL)
+        write(fd, "POLLNVAL¥n", strlen("POLLNVAL¥n"));
+}
+
