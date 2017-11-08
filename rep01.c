@@ -66,6 +66,7 @@ int main(void){
 
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
+      len = write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
