@@ -14,10 +14,9 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (3000) // 1ms
+#define TIMEOUT_MS (1) // 1ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
-void showPollRevents(int fd, short revents);
 
 int main(void){
 
@@ -64,7 +63,6 @@ int main(void){
 
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
 
-    showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
@@ -76,25 +74,4 @@ int main(void){
   system("bash end.sh 2 3 4 5");  // GPIOを開放
 
   return (EXIT_SUCCESS);
-}
-
-void showPollRevents(int fd, short revents) {
-  if(revents & POLLIN){
-    write(fd, "POLLIN¥n", strlen("POLLIN¥n"));
-  }
-  if(revents & POLLPRI){
-    write(fd, "POLLPRI¥n", strlen("POLLPRI¥n"));
-  }
-  if(revents & POLLOUT){
-    write(fd, "POLLOUT¥n", strlen("POLLOUT¥n"));
-  }
-  if(revents & POLLERR){
-    write(fd, "POLLERR¥n", strlen("POLLERR¥n"));
-  }
-  if(revents & POLLHUP){
-    write(fd, "POLLHUP¥n", strlen("POLLHUP¥n"));
-  }
-  if(revents & POLLNVAL){
-    write(fd, "POLLNVAL¥n", strlen("POLLNVAL¥n"));
-  }
 }

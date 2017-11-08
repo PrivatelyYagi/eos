@@ -15,5 +15,5 @@ echo $3 > ${GPIOPATH}/export
 echo 'out' > ${GPIOPATH}/gpio$3/direction
 echo $4 > ${GPIOPATH}/export
 echo 'in' > ${GPIOPATH}/gpio$4/direction
-echo 'both' > ${GPIOPATH}/gpio5/edge
+echo 'both' > ${GPIOPATH}/gpio$4/edge
 exit 0
