@@ -66,21 +66,90 @@ int main(void){
   for(;;){
 
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
-
+    nanosleep(&ts,NULL);
 
     if(pret==0){
+      write(fdgpio2, "0", 1);
+      write(fdgpio3, "0", 1);
+      write(fdgpio4, "0", 1);
       switch(count){
-        case 0:
-          write(fdgpio2, "0", 1);
-          write(fdgpio3, "0", 1);
-          write(fdgpio4, "0", 1);
-          break;
 
-        case 1:
+        case 0:
+          offTs.tv_nsec = 1000000;
           write(fdgpio2, "1", 1);
           nanosleep(&ts,NULL);
           write(fdgpio2, "0", 1);
           nanosleep(&offTs,NULL);
+          break;
+
+        case 1:
+          offTs.tv_nsec = 300000;
+          write(fdgpio2, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio2, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 2:
+          offTs.tv_nsec = 0;
+          write(fdgpio2, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio2, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 3:
+          offTs.tv_nsec = 1000000;
+          write(fdgpio3, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio3, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 4:
+          offTs.tv_nsec = 300000;
+          write(fdgpio3, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio3, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 5:
+          offTs.tv_nsec = 0;
+          write(fdgpio3, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio3, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 6:
+          offTs.tv_nsec = 1000000;
+          write(fdgpio4, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio4, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 7:
+          offTs.tv_nsec = 300000;
+          write(fdgpio4, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio4, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 8:
+          offTs.tv_nsec = 0;
+          write(fdgpio4, "1", 1);
+          nanosleep(&ts,NULL);
+          write(fdgpio4, "0", 1);
+          nanosleep(&offTs,NULL);
+          break;
+
+        case 9:
+
+          write(fdgpio2, "0", 1);
+          write(fdgpio2, "0", 1);
           break;
 
         default:
@@ -91,7 +160,7 @@ int main(void){
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
 
-      if(count > 1){
+      if(count > 9){
         count = 0;
       }else{
         count++;
