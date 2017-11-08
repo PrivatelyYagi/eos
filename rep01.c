@@ -22,7 +22,7 @@ void showPollRevents(int fd, short revents);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int i, pret, len, count, offCount;
+  int i, j, pret, len, count, offCount;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct pollfd pfd[PFD_SIZE];
@@ -71,6 +71,13 @@ int main(void){
 
     count++;
 
+    for(i=0;i<100;i++){
+      write(fdgpio2, "1", 1);
+      for(i=0;j<10;j++){
+        if(j == offCount) write(fdgpio2, "0", 1);
+        nanosleep(&ts,NULL);
+      }
+    }
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
     }else{
@@ -78,14 +85,6 @@ int main(void){
       len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
       offCount = 3;
-
-      for(i=0;i<100;i++){
-        write(fdgpio2, "1", 1);
-        for(i=0;i<10;i++){
-          if(i == offCount) write(fdgpio2, "0", 1);
-          nanosleep(&ts,NULL);
-        }
-      }
     }
   }
 
