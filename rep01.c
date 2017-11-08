@@ -82,8 +82,8 @@ int main(void){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
+      offTs.tv_nsec = 5000000; // 5ms
     }
   }
   return (EXIT_SUCCESS);
 }
-
