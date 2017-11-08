@@ -162,7 +162,7 @@ int main(void){
       write(fdgpio2, "0", 1);
       write(fdgpio3, "0", 1);
       write(fdgpio4, "0", 1);
-      for(;;){
+      for(;len == 1;){
         press++;
         nanosleep(&ts,NULL);
         printf("%d¥n",press );
