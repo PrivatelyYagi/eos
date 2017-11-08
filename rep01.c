@@ -14,7 +14,7 @@
 #define GPIO4 GPIOPATH "gpio4/value"
 #define GPIO5 GPIOPATH "gpio5/value"
 
-#define TIMEOUT_MS (1) // 1ms
+#define TIMEOUT_MS (1000) // 1ms
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
 void showPollRevents(int fd, short revents);
@@ -28,10 +28,10 @@ int main(void){
   struct pollfd pfd[PFD_SIZE];
 
   ts.tv_sec = 0;
-  ts.tv_nsec = 5000000;
+  ts.tv_nsec = 1000000; // 1ms
 
   count = 0;
-  offCount = 5;
+  offCount = 7;
 
   system("bash all.sh 2 3 4 5"); // GPIOの設定
 
@@ -78,6 +78,14 @@ int main(void){
       len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
       offCount = 3;
+
+      for(i=0;i<10;i++){
+        write(fdgpio2, "1", 1);
+        for(i=0;i<10;i++){
+          if(i == offCount) write(fdgpio2, "0", 1);
+          nanosleep(&ts,NULL);
+        }
+      }
     }
   }
 
