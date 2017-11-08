@@ -17,6 +17,8 @@
 #define TIMEOUT_MS (3000) // 3秒
 #define INBUF_SIZE (80)
 #define PFD_SIZE (1)
+void showPollRevents(int fd, short revents);
+
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
@@ -66,7 +68,7 @@ int main(void){
       write(STDOUT_FILENO, "timeout.¥n", strlen("timeout.¥n"));
     }else{
       write(STDOUT_FILENO, "sw¥n", strlen("sw¥n"));
-      lseek(fd, 0, SEEK_SET); len=read(fd, inbuf, INBUF_SIZE);
+      lseek(fdgpio5, 0, SEEK_SET); len=read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
     }
   }
