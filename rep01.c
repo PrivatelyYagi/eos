@@ -33,7 +33,7 @@ int main(void){
   ts.tv_nsec = 10000000; // 10ms
   offTs.tv_sec = 0;
   offTs.tv_nsec = 10000000; // 10ms
-  count = 10;
+  count = 0;
 
 
   fdgpio2 = open(GPIO2 , O_WRONLY | O_SYNC);
@@ -165,6 +165,11 @@ int main(void){
 
       if(count > 8){
         count = 0;
+        close(fdgpio2);
+        close(fdgpio3);
+        close(fdgpio4);
+        close(fdgpio5);
+        return 0;
       }else{
         count++;
       }
