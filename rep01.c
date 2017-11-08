@@ -23,13 +23,15 @@ void showPollRevents(int fd, short revents);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int pret, len;
+  int pret, len, count, offCount;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct pollfd pfd[PFD_SIZE];
 
+  count = 0;
+  offCount = 5;
   ts.tv_sec = 0;
-  ts.tv_nsec = 500000000; // 500ms
+  ts.tv_nsec = 1000000; // 1ms
 
 //  system("bash init.sh"); // GPIOの設定
 
@@ -64,22 +66,18 @@ int main(void){
     pret = poll(pfd, PFD_SIZE, TIMEOUT_MS);
     nanosleep(&ts, NULL);
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
-    printf("%d\n",pret );
     if(pret==0){
-      printf("%d\n",fdgpio2 );
+      write(fdgpio2,"1",1);
       nanosleep(&ts,NULL);
-/*
-      close(fdgpio2);
-      close(fdgpio3);
-      close(fdgpio4);
-      close(fdgpio5);
-      system("bash end.sh 2 3 4 5");  // GPIOを開放
-*/
+      if(count > offCount) write(fdgpio2,"0",1);
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
       len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
+      offCount = 8;
     }
+    count++;
+    if(count>10) count = 0;
 
   }
 
