@@ -61,7 +61,8 @@ int main(void){
 
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
     nanosleep(&ts, NULL);
-   if(pret==0){
+    printf("%d\n",pret );
+    if(pret==0){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
     }
