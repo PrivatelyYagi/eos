@@ -23,7 +23,7 @@ void showPollRevents(int fd, short revents);
 int main(void){
 
   int fdgpio2,fdgpio3,fdgpio4,fdgpio5;
-  int pret;
+  int pret, len;
   char inbuf[INBUF_SIZE];
   struct timespec ts;
   struct pollfd pfd[PFD_SIZE];
