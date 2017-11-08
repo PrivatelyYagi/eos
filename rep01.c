@@ -63,26 +63,25 @@ int main(void){
   pfd[0].events = POLLPRI | POLLERR;
   for(;;){
 
-    write(fdgpio2, "1", 1);
     pret=poll(pfd, PFD_SIZE, TIMEOUT_MS);
 
-    if(count >= offCount){ write(fdgpio2, "0", 1); }
-    if(count >= 10){ count = 0; }
-
-    count++;
-
-    for(i=0;i<100;i++){
+　　for(i=0;i<10;i++){
       write(fdgpio2, "1", 1);
-      for(j=0;j<10;j++){
-        if(j == offCount) write(fdgpio2, "0", 1);
-        nanosleep(&ts,NULL);
+      if(count > offCount) {
+       write(fdgpio2, "0", 1);
       }
+      nanosleep(&ts,NULL);
     }
+    count++;
+    if(count > 10){
+      count = 0;
+    }
+
     showPollRevents(STDOUT_FILENO, pfd[0].revents);
     if(pret==0){
     }else{
       lseek(fdgpio5, 0, SEEK_SET);
-      len=read(fdgpio5, inbuf, INBUF_SIZE);
+      len = read(fdgpio5, inbuf, INBUF_SIZE);
       write(STDOUT_FILENO, inbuf, len);
       offCount = 3;
     }
